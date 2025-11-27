@@ -1,0 +1,363 @@
+<!--
+Starter single-file portfolio (HTML/CSS/JS) modeled after a clean modern portfolio.
+How to use:
+1. Open this file in a browser to preview.
+2. Replace placeholder text/images with your own content.
+3. Commit to a GitHub repo and enable GitHub Pages (Settings → Pages → Source: main branch / root). OR deploy to Netlify/Vercel by connecting your repo.
+
+Quick git commands:
+  git init
+  git add .
+  git commit -m "Initial portfolio"
+  git branch -M main
+  git remote add origin <your-github-repo-url>
+  git push -u origin main
+
+Notes: replace email in the contact form (mailto:) or integrate with Formspree/Netlify Forms for submissions.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nikhil Waghmare — Game Designer &amp; Developer</title>
+  <meta name="description" content="Portfolio of [Your Name] — Game Designer. Projects, resume, contact.">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Simple icon CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="" crossorigin="anonymous">
+
+  <style>
+    :root{
+      --accent:#000000;
+      --bg:#ffffff;
+      --card:#ffffff;
+      --muted:rgba(0,0,0,0.75);
+      --glass: rgba(0,0,0,0.04);
+      color-scheme: light;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Courier New', Courier, monospace;background:#ffffff;color:#000000;transition:background 800ms ease;scroll-behavior:smooth;}      
+    a{color:inherit;text-decoration:none}
+
+    header{position:sticky;top:0;backdrop-filter: blur(6px);background:linear-gradient(180deg,#8ad7ff,#6cbff5);border-bottom:1px solid rgba(0,0,0,0.06);z-index:40;transition:background 500ms ease}  
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand .logo{width:42px;height:42px;border-radius:8px;background:#ffffff; color:#000000;display:flex;align-items:center;justify-content:center;font-weight:700} 
+
+    nav ul{display:flex;gap:18px;align-items:center;margin:0;padding:0;list-style:none}
+    nav a{font-weight:600;color:#000000;font-size:15px} 
+    .cta{padding:8px 12px;border-radius:10px;background:#ffffff;color:#000000;font-weight:700;border:1px solid rgba(0,0,0,0.06)} 
+
+    /* Mobile menu */
+    .menu-btn{display:none}
+    @media(max-width:880px){nav ul{display:none}.menu-btn{display:block}}
+
+    /* hero */
+    .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:80px 0;min-height:70vh;text-align:center;background:linear-gradient(180deg,#b3e5ff,#8ad7ff,#6cbff5);border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,0.08);}
+    .hero h1{font-size:78px;line-height:1;margin:0;font-weight:900;color:#000000}
+    .hero h1 span{name:bold}
+    .hero h2{font-size:32px;margin:6px 0 0 0;color:#000000;font-weight:700}
+    .hero p{color:rgba(0,0,0,0.75);max-width:880px;margin:12px auto}
+    .hero .hero-actions{margin-top:20px;display:flex;gap:20px;align-items:center;justify-content:center}
+    .hero .btn-primary{padding:14px 28px;border-radius:50px;background:#0077b6;color:#ffffff;font-weight:800;border:none;box-shadow:0 12px 30px rgba(0,0,0,0.12)}
+    .hero .btn-secondary{padding:14px 28px;border-radius:50px;background:#023e8a;color:#ffffff;font-weight:700;border:none}
+    .profile-card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 6px 20px rgba(3,7,18,0.06)}
+{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 6px 20px rgba(3,7,18,0.6)}
+    .profile-card img{width:100%;border-radius:10px;display:block}
+
+    /* sections */
+    section{padding:48px 0}
+    h2.section-title{font-size:20px;margin:0 0 18px 0}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media(max-width:980px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.grid{grid-template-columns:1fr}}
+
+    .card{background:linear-gradient(180deg,#8ad7ff,#6cbff5);padding:18px;border-radius:12px;border:1px solid rgba(0,0,0,0.08);box-shadow:0 8px 20px rgba(0,0,0,0.08)}
+    .project-title{font-weight:700;margin:6px 0}
+    .muted{color:rgba(0,0,0,0.7);font-size:14px}  
+
+    footer{padding:28px 0;color:rgba(0,0,0,0.85)}
+
+    /* simple reveal animation */
+    .reveal{opacity:0;transform:translateY(10px);transition:all 600ms cubic-bezier(.2,.9,.3,1)}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* tiny utilities */
+    .flex{display:flex;align-items:center}
+    .space-between{justify-content:space-between}
+    .btn-ghost{padding:8px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:#000000} 
+
+    /* contact form */
+    .contact-form input,.contact-form textarea{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.05);color:inherit;margin-top:8px}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:640px){.contact-grid{grid-template-columns:1fr}}
+  </style>
+
+
+  <style>
+    /* Modal styles */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(4,6,12,0.7);display:none;align-items:center;justify-content:center;z-index:120}
+    .modal-backdrop.visible{display:flex}
+    .modal{background:#ffffff;max-width:880px;width:94%;border-radius:12px;padding:18px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 10px 40px rgba(0,0,0,0.06);color:#000000} 
+    .modal .modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .modal .modal-title{font-size:20px;font-weight:700}
+    .modal .modal-body{margin-top:12px}
+    .modal .modal-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    .modal .modal-gallery img{width:100%;border-radius:8px}
+    @media(max-width:720px){.modal .modal-gallery{grid-template-columns:repeat(2,1fr)}}
+    .modal .close-btn{background:transparent;border:0;color:#000000;font-weight:700;cursor:pointer} 
+    .modal .links{margin-top:12px}
+  </style>
+
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">NY</div>
+        <div>
+          <div style="font-weight:700">Nikhil Waghmare</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.85);margin-top:2px">Game Designer • Level Designer • GDD</div>
+        </div>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#work">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a class="cta" href="#contact">Hire me</a></li>
+        </ul>
+      </nav>
+
+      <button class="menu-btn btn-ghost" aria-expanded="false" onclick="toggleMenu(this)">Menu</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+  <div style="position:absolute;left:40px;top:38%;display:flex;flex-direction:column;gap:14px">
+    <a href="#" title="LinkedIn" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;text-decoration:none;box-shadow:0 8px 30px rgba(0,0,0,0.06)"><i class="fab fa-linkedin"></i></a>
+    <a href="#" title="YouTube" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;text-decoration:none;box-shadow:0 8px 30px rgba(0,0,0,0.06)"><i class="fab fa-youtube"></i></a>
+    <a href="#" title="Games" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;text-decoration:none;box-shadow:0 8px 30px rgba(0,0,0,0.06)"><i class="fas fa-gamepad"></i></a>
+  </div>
+
+  <div style="z-index:5;position:relative;">
+    <h1>Hi, It's <span style="font-weight:900">Nikhil Waghmare</span></h1>
+    <h2>I'm a Game Designer</h2>
+    <p>I’m a Game Designer who loves creating stuff that makes players go “one more try!” 😅</p>
+
+    <div class="hero-actions">
+      <a class="btn-primary" href="#projects">My Projects</a>
+      <a class="btn-secondary" href="/resume.pdf" target="_blank">Download CV</a>
+    </div>
+  </div>
+</section>
+
+    <section id="about" >
+      <h2 class="section-title">About</h2>
+      <div class="card reveal">
+        <p>Game Designer specializing in system and UX design with hands-on Unity experience. Skilled at creating balanced, engaging mechanics, clear documentation, and player‑focused experiences for mobile and PC titles. Looking to contribute to projects that blend creative storytelling with data‑driven gameplay.</p>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <div class="muted">Skills: Level Design • Puzzle Design • Unity • GDD • Prototyping</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" >
+      <h2 class="section-title">Projects</h2>
+      <div class="grid">
+        <article class="card reveal" onclick="openModal('tatya')" style="cursor:pointer">
+          <img src="./TatyaGamePoster.jpg" alt="Tatya Project Poster" style="width:100%;border-radius:8px">
+          <div class="project-title">Tatya — Horror Survival</div>
+          <div class="muted">Game Designer · GDD · Level &amp; Puzzle Design</div>
+        </article>
+
+        <article class="card reveal" onclick="openModal('be-my-guest')" style="cursor:pointer">
+          <img src="https://via.placeholder.com/600x300.png?text=Be+My+Guest" style="width:100%;border-radius:8px">
+          <div class="project-title">Be My Guest — Coming Soon</div>
+          <div class="muted">A talk‑show simulation strategy game · Coming Soon</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="work" >
+      <h2 class="section-title">Experience</h2>
+      <div class="card reveal">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700">Game Design Intern — EaseWin</div>
+            <div class="muted">Nov 2025 — Present</div>
+            <ul style="margin-top:8px;color:#000000;font-size:14px;max-width:700px;padding-left:18px;list-style:disc;">
+<li>Pitched original game concepts to the team and stakeholders.</li>
+<li>Created clear and complete GDDs for gameplay, levels, and systems.</li>
+<li>Designed levels and puzzles with balanced difficulty and flow.</li>
+<li>Coordinated with artists and developers to align design execution.</li>
+<li>Managed team tasks and ensured smooth milestone delivery.</li>
+</ul>
+          </div>
+          <div class="muted">Tasks: GDD, Level Design, Puzzle Design, Team Management</div>
+        </div>
+      </div>
+
+      <div class="card reveal" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700">Game Design Intern — Resurgence Interactive</div>
+            <div class="muted">Jun 2025 — Jul 2025</div>
+            <ul style="margin-top:8px;color:#000000;font-size:14px;max-width:700px;padding-left:18px;list-style:disc;">
+<li>Designed and balanced core vehicle mechanics (dash, ramming, boost jump) improving playtest engagement by 30%.</li>
+<li>Created detailed system design docs for car stats, speed curves, and upgrade formulas.</li>
+<li>Collaborated across design and programming to maintain design integrity during implementation.</li>
+</ul>
+          </div>
+          <div class="muted">Tasks: GDD, level design, team coordination</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" >
+      <h2 class="section-title">Contact</h2>
+      <div class="card contact-form reveal">
+        <form action="mailto:your@email.com" method="POST" enctype="text/plain">
+          <div class="contact-grid">
+            <input type="text" name="name" placeholder="Your name" required>
+            <input type="email" name="email" placeholder="Email" required>
+          </div>
+          <input type="text" name="subject" placeholder="Subject" style="margin-top:12px">
+          <textarea name="message" placeholder="Message" rows="6" style="margin-top:12px"></textarea>
+          <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+            <button type="submit" class="cta">Send</button>
+            <button type="reset" class="btn-ghost">Reset</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  
+  <!-- Project modals -->
+  <div id="modal-tatya" class="modal-backdrop" aria-hidden="true" onclick="backdropClick(event,'tatya')">
+    <div class="modal" role="dialog" aria-labelledby="modal-tatya-title">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-tatya-title">Tatya — Horror Survival</div>
+        <button class="close-btn" onclick="closeModal('tatya')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="muted">Lead Designer · GDD · Level &amp; Puzzle Design</div>
+        <p style="margin-top:10px">We are cursed by a Saadhu in the past, and now we have come to Tatya to ask him to free us (as Saadhu mentioned the solution to the curse lies to Tatya). Instead, he asks the player to help him escape from the place — a jail magically locked with mantras. The player must explore, solve item-based riddles, and retrieve relics to free him.</p>
+        <div class="modal-gallery">
+          <img src="./tatya-1.png" alt="Tatya 1" onclick="openImage(this.src)">
+          <img src="./tatya-2.png" alt="Tatya 2" onclick="openImage(this.src)">
+          <img src="./tatya-3.png" alt="Tatya 3" onclick="openImage(this.src)">
+          <img src="./tatya-4.png" alt="Tatya 4" onclick="openImage(this.src)">
+          <img src="./tatya-5.png" alt="Tatya 5" onclick="openImage(this.src)">
+        </div>
+        <div class="links">
+          <a class="cta" href="https://youtu.be/C7iebICbj2E?si=uN6VvsFqnat36ysv" target="_blank">Gameplay Video</a>
+          <a class="btn-ghost" href="#" id="tatya-download">Download Prototype</a>
+          <a class="btn-ghost" href="./Tatya-Design-and-Development-Process.pdf" download>Design Doc (PDF)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-be-my-guest" class="modal-backdrop" aria-hidden="true" onclick="backdropClick(event,'be-my-guest')">
+    <div class="modal" role="dialog" aria-labelledby="modal-be-my-guest-title">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-be-my-guest-title">Be My Guest — Coming Soon</div>
+        <button class="close-btn" onclick="closeModal('be-my-guest')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="muted">Design Lead · Talk-show simulation</div>
+        <p style="margin-top:10px">Be My Guest is a talk-show simulation where you manage guests, TRP, and live segments. Concept art and early prototypes shown here.</p>
+        <div class="modal-gallery">
+          <img src="https://via.placeholder.com/800x450.png?text=Be+My+Guest+1" alt="Be My Guest 1" onclick="openImage(this.src)">
+          <img src="https://via.placeholder.com/800x450.png?text=Be+My+Guest+2" alt="Be My Guest 2" onclick="openImage(this.src)">
+          <img src="https://via.placeholder.com/800x450.png?text=Be+My+Guest+3" alt="Be My Guest 3" onclick="openImage(this.src)">
+          <img src="https://via.placeholder.com/800x450.png?text=Be+My+Guest+4" alt="Be My Guest 4" onclick="openImage(this.src)">
+          <img src="https://via.placeholder.com/800x450.png?text=Be+My+Guest+5" alt="Be My Guest 5" onclick="openImage(this.src)">
+        </div>
+        <div class="links">
+          <a class="cta" href="#" target="_blank">Design Notes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image lightbox -->
+  <div id="lightbox" class="modal-backdrop" aria-hidden="true" onclick="closeLightbox()">
+    <div class="modal" style="max-width:1000px;">
+      <button class="close-btn" onclick="closeLightbox()">✕</button>
+      <img id="lightbox-img" src="" alt="" style="width:100%;border-radius:8px;margin-top:8px">
+    </div>
+  </div>
+
+  <footer>
+    <div class="container flex space-between">
+      <div>&copy; <span id="year"></span> Nikhil Waghmare — Game Designer</div>
+      <div class="muted">Built with ❤️ • Host on GitHub Pages</div>
+    </div>
+  </footer>
+
+  <script>
+    // small scripts: year, mobile menu toggle, reveal on scroll
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function toggleMenu(button){
+      const open = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', (!open).toString());
+      alert('Mobile menu placeholder — for more advanced menu replace this with real menu logic.');
+    }
+
+    // reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target)} })
+    }, {threshold:0.12});
+    revealEls.forEach(el=>observer.observe(el));
+
+    // Modal controls
+    function openModal(id){
+      const el = document.getElementById('modal-'+id);
+      if(!el) return;
+      el.classList.add('visible');
+      el.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id){
+      const el = document.getElementById('modal-'+id);
+      if(!el) return;
+      el.classList.remove('visible');
+      el.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+    function backdropClick(evt,id){
+      if(evt.target.id === 'modal-'+id) closeModal(id);
+    }
+    // Lightbox
+    function openImage(src){
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = src; lb.classList.add('visible'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('visible'); lb.setAttribute('aria-hidden','true'); document.getElementById('lightbox-img').src=''; document.body.style.overflow='';
+    }
+
+    // keyboard close (Esc)
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ document.querySelectorAll('.modal-backdrop.visible').forEach(m=>{m.classList.remove('visible'); m.setAttribute('aria-hidden','true')}); document.body.style.overflow=''; }});
+
+    
+
+    // cleaned up: removed experimental parallax/background code to restore stability
+  </script>
+</body>
+</html>
